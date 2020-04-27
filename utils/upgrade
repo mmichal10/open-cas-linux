@@ -62,8 +62,8 @@ class InitUpgrade(UpgradeState):
 
         # Although there shouldn't be any problem with upgrade from CAS 19.9 to newer, this feature
         # is not full validated so it is disabled by default.
-        if (int(version[CAS_DISK_KEY].split('.')[0]) < CAS_DISK_MIN_VER):
-            return Failure(f"Minimal cas_disk version required to perform upgrade is 20.01!")
+#if (int(version[CAS_DISK_KEY].split('.')[0]) < CAS_DISK_MIN_VER):
+#           return Failure(f"Minimal cas_disk version required to perform upgrade is 20.01!")
 
         if version[CAS_CLI_KEY] != version[CAS_CACHE_KEY]:
             return Failure("Mismatch between CLI and cas_cache version")
