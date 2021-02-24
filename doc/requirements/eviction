@@ -1,0 +1,28 @@
+---
+group: Eviction
+---
+
+Eviction is a process of invalidating cachelines in order to map to a new addresses
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+title: Eviction priorities
+id: priorities
+---
+
+The product shall perfrom eviction based on the priority information
+associated with IO classes.
+
+The product shall evict in the following order:
+
+1. IO classes with excedeed occupancy limit.
+2. Lower priority IO classes (omit pinned IO Classes)
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+title: Cold data eviction
+id: cold
+---
+
+The product shall evict the data within a single IO class in the last recently
+used (LRU) order.
