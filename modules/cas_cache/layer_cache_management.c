@@ -1353,7 +1353,6 @@ int cache_mngt_add_core_to_cache(const char *cache_name, size_t name_len,
 	 * streams which reach cutoff threshold, as we can reasonably assume that
 	 * they are likely be continued after thread is rescheduled to another CPU.
 	 */
-	cfg->seq_cutoff_promote_on_threshold = true;
 
 	init_completion(&add_context.cmpl);
 	add_context.core = &core;
@@ -2308,7 +2307,7 @@ int cache_mngt_activate(struct ocf_mngt_cache_device_config *cfg,
 	}
 	_cache_mngt_async_context_init(&context->async);
 
-	ocf_mngt_cache_activate(cache, cfg, _cache_mngt_start_complete,
+	ocf_mngt_cache_activate(cache, cfg, true, _cache_mngt_start_complete,
 			context);
 	result = wait_for_completion_interruptible(&context->async.cmpl);
 
