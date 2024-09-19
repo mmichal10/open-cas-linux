@@ -492,7 +492,7 @@ static void block_dev_forward_io(ocf_volume_t volume,
 
 		if (!bio) {
 			error = -ENOMEM;
-			break;
+			goto err;
 		}
 
 		/* Setup BIO */
@@ -528,28 +528,20 @@ static void block_dev_forward_io(ocf_volume_t volume,
 			/* Update BIO vector iterator */
 			if (added != cas_io_iter_move(&iter, added)) {
 				error = -ENOBUFS;
-				break;
-			}
-		}
-
-		if (error == 0) {
-			/* Increase IO reference for sending this IO */
-
-			ocf_forward_get(token);
-			/* Send BIO */
-			CAS_DEBUG_MSG("Submit IO");
-			cas_submit_bio(bio_dir, bio);
-			bio = NULL;
-		} else {
-			if (bio) {
 				bio_put(bio);
 				bio = NULL;
+				goto err;
 			}
-
-			/* ERROR, stop processed */
-			break;
 		}
+
+		/* Increase IO reference for sending this IO */
+		ocf_forward_get(token);
+		/* Send BIO */
+		CAS_DEBUG_MSG("Submit IO");
+		cas_submit_bio(bio_dir, bio);
+		bio = NULL;
 	}
+err:
 	blk_finish_plug(&plug);
 
 	if (bytes && error == 0) {
